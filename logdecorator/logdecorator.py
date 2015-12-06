@@ -73,10 +73,11 @@ def print_traceback():
     traceback.print_tb(tb)
     del tb
 
-def log_prefix(func=None, *, prefix='', return_status='', log_level='DEBUG'):
+def log_prefix(func=None, *, prefix='', return_status='', log_level='DEBUG', show_args=True):
     if func is None:
-        return partial(log_prefix, prefix=prefix, return_status=return_status, log_level=log_level)
+        return partial(log_prefix, prefix=prefix, return_status=return_status, log_level=log_level, show_args=show_args)
     msg = prefix + '[' + func.__qualname__ + '()]'
+
     @wraps(func)
     def FUNCTION_CALL(*args, **kwargs):
         parent = get_parent_function()
@@ -93,9 +94,15 @@ def log_prefix(func=None, *, prefix='', return_status='', log_level='DEBUG'):
                 except:
                     args_list.append("unconvertable thing:" + str(type(arg)))
 
-        args_output_string = ' '.join(pprint.pformat(args_list).split("\n"))
-        kwargs_output_string = ' '.join(pprint.pformat(kwargs).split("\n"))
+        if show_args:
+            args_output_string = ' '.join(pprint.pformat(args_list).split("\n"))
+            kwargs_output_string = ' '.join(pprint.pformat(kwargs).split("\n"))
+        else:
+            args_output_string = '(args supressed) '
+            kwargs_output_string = '(kwargs_supressed)'
+
         output_string = msg + ' caller: ' + parent + '()' + ' args:' + args_output_string + kwargs_output_string
+
 
         if log_level == 'DEBUG':
             logger.debug(Fore.GREEN + output_string)
