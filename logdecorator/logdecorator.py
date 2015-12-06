@@ -19,7 +19,7 @@ FORMATTER = logging.Formatter(FORMAT)
 QUIET_FORMATTER = logging.Formatter(QUIET_FORMAT)
 
 #http://docs.python.org/3/howto/logging.html
-log_levels = {
+LOG_LEVELS = {
 'CRITICAL':logging.CRITICAL,    # 50
 'ERROR':   logging.ERROR,       # 40
 'WARNING': logging.WARNING,     # 30    #python default level
