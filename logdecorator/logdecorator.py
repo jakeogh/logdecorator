@@ -27,7 +27,7 @@ LOG_LEVELS = {
 'DEBUG':   logging.DEBUG        # 10
 }
 
-#logging.basicConfig(format=FORMAT, level=log_levels['WARNING'])
+#logging.basicConfig(format=FORMAT, level=LOG_LEVELS['WARNING'])
 
 # Logger.setLevel() specifies the lowest-severity log message a logger will
 #   handle, where debug is the lowest built-in severity level and critical is
@@ -55,8 +55,8 @@ logger_quiet_ch.setFormatter(QUIET_FORMATTER)
 logger.addHandler(logger_ch)
 logger_quiet.addHandler(logger_quiet_ch)
 
-logger.setLevel(log_levels['DEBUG'])
-logger_quiet.setLevel(log_levels['INFO'])
+logger.setLevel(LOG_LEVELS['DEBUG'])
+logger_quiet.setLevel(LOG_LEVELS['INFO'])
 
 from functools import wraps
 from functools import partial
