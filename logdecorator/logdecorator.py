@@ -7,9 +7,20 @@
 
 import colorama
 from colorama import Fore
-import logging as logging
+
+import logging
 
 __version__ = "0.0.1"
+
+class logmaker():
+    def __init__(self, output_format, name, level):
+        self.logger = logging.getLogger(name)
+        self.logger_ch = logging.StreamHandler()
+        self.formatter = logging.Formatter(output_format)
+        self.logger_ch.setFormatter(self.formatter)
+        self.logger.addHandler(self.logger_ch)
+        self.logger.setLevel(level)
+
 
 # http://stackoverflow.com/questions/10973362/python-logging-function-name-file-name-line-number-using-a-single-file
 FORMAT = "%(levelname)-5s %(lineno)4s %(filename)-18s:%(funcName)-13s : %(message)s" + Fore.RESET
@@ -43,20 +54,6 @@ LOG_LEVELS = {
 #   verbose for logging messages than using the log level convenience methods
 #   listed above, but this is how to log at custom log levels.
 
-logger = logging.getLogger('logging_debug')
-logger_quiet = logging.getLogger('logging_quiet')
-
-logger_ch = logging.StreamHandler()
-logger_quiet_ch = logging.StreamHandler()
-
-logger_ch.setFormatter(FORMATTER)
-logger_quiet_ch.setFormatter(QUIET_FORMATTER)
-
-logger.addHandler(logger_ch)
-logger_quiet.addHandler(logger_quiet_ch)
-
-logger.setLevel(LOG_LEVELS['DEBUG'])
-logger_quiet.setLevel(LOG_LEVELS['INFO'])
 
 from functools import wraps
 from functools import partial
@@ -72,6 +69,8 @@ def print_traceback():
     ex_type, ex, tb = sys.exc_info()
     traceback.print_tb(tb)
     del tb
+
+log_prefix_logger = logmaker(output_format=FORMAT, name="logging_debug3", level=LOG_LEVELS['DEBUG'])
 
 def log_prefix(func=None, *, prefix='', return_status='', log_level='DEBUG', show_args=True):
     if func is None:
@@ -103,33 +102,33 @@ def log_prefix(func=None, *, prefix='', return_status='', log_level='DEBUG', sho
 
         output_string = msg + ' caller: ' + parent + '()' + ' args:' + args_output_string + kwargs_output_string
 
-
         if log_level == 'DEBUG':
-            logger.debug(Fore.GREEN + output_string)
+            log_prefix_logger.logger.debug(Fore.GREEN + output_string)
         elif log_level == 'INFO':
-            logger.info(Fore.WHITE + output_string)
+            log_prefix_logger.logger.info(Fore.WHITE + output_string)
         elif log_level == 'WARNING':
-            logger.warning(Fore.YELLOW + output_string)
+            log_prefix_logger.logger.warning(Fore.YELLOW + output_string)
         elif log_level == 'ERROR':
-            logger.error(Fore.RED + output_string)
+            log_prefix_logger.logger.error(Fore.RED + output_string)
         elif log_level == 'CRITICAL':
-            logger.critical(Fore.RED + output_string)
+            log_prefix_logger.logger.critical(Fore.RED + output_string)
         else:
-            logger.critical("UNKNOWN LOG LEVEL:", log_level)
+            log_prefix_logger.logger.critical("UNKNOWN LOG LEVEL:", log_level)
             quit(1)
 
         answer = func(*args, **kwargs)
         if answer == False:
-            logger.debug(Fore.RED + func.__name__ + " returned False")
+            log_prefix_logger.logger.debug(Fore.RED + func.__name__ + " returned False")
         else:
             if return_status == True:
-                logger.debug(Fore.YELLOW + func.__name__ + " OK")
+                log_prefix_logger.logger.debug(Fore.YELLOW + func.__name__ + " OK")
         return answer
 
     return FUNCTION_CALL
 
 def main():
-    logger.info('logdecorator.py:main()')
+    pass
+#    logger.info('logdecorator.py:main()')
 
 
 # Fore.BLACK
