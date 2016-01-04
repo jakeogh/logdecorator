@@ -5,9 +5,6 @@
 # ERROR      Due to a more serious problem, the software has not been able to perform some function.
 # CRITICAL   A serious error, indicating that the program itself may be unable to continue running.
 
-import colorama
-from colorama import Fore
-
 import logging
 
 __version__ = "0.0.1"
@@ -23,8 +20,8 @@ class logmaker():
 
 
 # http://stackoverflow.com/questions/10973362/python-logging-function-name-file-name-line-number-using-a-single-file
-FORMAT = "%(levelname)-5s %(lineno)4s %(filename)-18s:%(funcName)-13s : %(message)s" + Fore.RESET
-QUIET_FORMAT = "%(message)s" + Fore.RESET
+FORMAT = "%(levelname)-5s %(lineno)4s %(filename)-18s:%(funcName)-13s : %(message)s"
+QUIET_FORMAT = "%(message)s"
 
 FORMATTER = logging.Formatter(FORMAT)
 QUIET_FORMATTER = logging.Formatter(QUIET_FORMAT)
@@ -103,25 +100,25 @@ def log_prefix(func=None, *, prefix='', return_status='', log_level='DEBUG', sho
         output_string = msg + ' caller: ' + parent + '()' + ' args:' + args_output_string + kwargs_output_string
 
         if log_level == 'DEBUG':
-            log_prefix_logger.logger.debug(Fore.GREEN + output_string)
+            log_prefix_logger.logger.debug(output_string)
         elif log_level == 'INFO':
-            log_prefix_logger.logger.info(Fore.WHITE + output_string)
+            log_prefix_logger.logger.info(output_string)
         elif log_level == 'WARNING':
-            log_prefix_logger.logger.warning(Fore.YELLOW + output_string)
+            log_prefix_logger.logger.warning(output_string)
         elif log_level == 'ERROR':
-            log_prefix_logger.logger.error(Fore.RED + output_string)
+            log_prefix_logger.logger.error(output_string)
         elif log_level == 'CRITICAL':
-            log_prefix_logger.logger.critical(Fore.RED + output_string)
+            log_prefix_logger.logger.critical(output_string)
         else:
             log_prefix_logger.logger.critical("UNKNOWN LOG LEVEL:", log_level)
             quit(1)
 
         answer = func(*args, **kwargs)
         if answer == False:
-            log_prefix_logger.logger.debug(Fore.RED + func.__name__ + " returned False")
+            log_prefix_logger.logger.debug(func.__name__ + " returned False")
         else:
             if return_status == True:
-                log_prefix_logger.logger.debug(Fore.YELLOW + func.__name__ + " OK")
+                log_prefix_logger.logger.debug(func.__name__ + " OK")
         return answer
 
     return FUNCTION_CALL
@@ -129,15 +126,4 @@ def log_prefix(func=None, *, prefix='', return_status='', log_level='DEBUG', sho
 def main():
     pass
 #    logger.info('logdecorator.py:main()')
-
-
-# Fore.BLACK
-# Fore.BLUE
-# Fore.CYAN
-# Fore.GREEN
-# Fore.MAGENTA
-# Fore.RED
-# Fore.RESET
-# Fore.WHITE
-# Fore.YELLOW
 

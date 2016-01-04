@@ -6,7 +6,7 @@ Library to facilitate nice --debug and --verbose options.
 import re
 from setuptools import find_packages, setup
 
-dependencies = ['click', 'colorama']
+dependencies = ['click']
 
 version = re.search(
     '^__version__\s*=\s*"(.*)"',
